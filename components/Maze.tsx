@@ -36,11 +36,7 @@ const MazeComponent: React.FC<MazeProps> = ({ maze }) => {
                 ]}
               >
                 {isWall ? (
-                  <View style={styles.wall}>
-                    <View style={styles.wallTop} />
-                    <View style={styles.wallFront} />
-                    <View style={styles.wallSide} />
-                  </View>
+                  <View style={styles.wall} />
                 ) : (
                   <View style={styles.path} />
                 )}
@@ -77,37 +73,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   wall: {
-    position: 'absolute',
-    transform: [{ perspective: 1000 }],
-  },
-  wallTop: {
-    position: 'absolute',
     width: '100%',
     height: '100%',
     backgroundColor: '#000',
-    borderWidth: 2,
-    borderColor: '#ff0000',
+    borderWidth: 4,
+    borderColor: '#111',
     borderRadius: 4,
-    zIndex: 3,
-  },
-  wallFront: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#000',
-    borderWidth: 2,
-    borderColor: '#ff0000',
-    zIndex: 2,
-  },
-  wallSide: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#000',
-    borderWidth: 2,
-    borderColor: '#ff0000',
-    transform: [{ rotateY: '90deg' }],
-    zIndex: 1,
   },
   path: {
     width: '100%',

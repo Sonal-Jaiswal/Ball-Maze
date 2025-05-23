@@ -63,43 +63,14 @@ export default function App() {
   const isValidPosition = (x: number, y: number) => {
     const col = Math.floor(x / cellSize);
     const row = Math.floor(y / cellSize);
-    
     // Check if position is within maze bounds
     if (col < 0 || col >= maze.size || row < 0 || row >= maze.size) {
       return false;
     }
-    
-    // Check if position is in a wall
+    // Check if position is in a wall cell
     if (maze.walls.some(w => w.row === row && w.col === col)) {
       return false;
     }
-    
-    // Calculate ball radius and wall margin
-    const ballRadius = 15; // Half of the ball size
-    const wallMargin = 5; // Additional margin to prevent ball from touching walls
-    const totalMargin = ballRadius + wallMargin;
-    
-    // Check surrounding cells for walls with margin
-    for (let r = Math.floor(row - 1); r <= Math.ceil(row + 1); r++) {
-      for (let c = Math.floor(col - 1); c <= Math.ceil(col + 1); c++) {
-        if (r >= 0 && r < maze.size && c >= 0 && c < maze.size) {
-          if (maze.walls.some(w => w.row === r && w.col === c)) {
-            // Calculate distance to wall center
-            const wallCenterX = (c + 0.5) * cellSize;
-            const wallCenterY = (r + 0.5) * cellSize;
-            const dx = x - wallCenterX;
-            const dy = y - wallCenterY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            // If ball is too close to wall, prevent movement
-            if (distance < totalMargin) {
-              return false;
-            }
-          }
-        }
-      }
-    }
-    
     return true;
   };
 
@@ -168,13 +139,12 @@ export default function App() {
         const col = Math.floor(newX / cellSize);
         const row = Math.floor(newY / cellSize);
         if (row === maze.size - 1 && col === maze.size - 1) {
-          console.log('Goal reached!'); // Debug log
           setScore(prev => prev + 100);
           soundManager.playSound('victory');
           generateNewMaze();
         }
       } else {
-        // Only play collision sound if it exists
+        // Play collision sound only when trying to move into a wall
         try {
           soundManager.playSound('collision');
         } catch (error) {
@@ -287,8 +257,9 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
     alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#1a1a2e',
   },
   gameTitle: {
     fontSize: 32,
@@ -298,6 +269,7 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
+    alignSelf: 'center',
   },
   muteButton: {
     position: 'absolute',
@@ -310,11 +282,13 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: '100%',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   bottomContainer: {
     width: '100%',
     paddingHorizontal: 20,
     marginTop: 20,
+    alignItems: 'center',
   },
   hudContainer: {
     flexDirection: 'row',
