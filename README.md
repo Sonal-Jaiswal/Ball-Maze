@@ -19,9 +19,7 @@
 [Download Gameplay Video](assets/screen.mp4)
 
 ## 🎥 Gameplay Video
-
-[![Watch the video](assets/screen3.PNG)](assets/screen.mp4)
-
+![Demo](assets/screen.gif)
 
 ---
 
