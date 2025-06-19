@@ -1,28 +1,26 @@
-
 # 🎮 Red Ball Escape
 
-**Red Ball Escape** is a fast-paced gyro-controlled maze game built using **React Native + Expo**. Navigate a red ball through dynamically generated mazes, dodge obstacles, and race against time to reach the goal. Designed for mobile devices, the game utilizes the device’s gyroscope to create an immersive experience. Beat your own high score and test your reflexes!
+**Red Ball Escape** is a fast-paced gyro-controlled maze game built using **React Native + Expo**. Navigate a red ball through dynamically generated mazes, dodge obstacles, and race against time to reach the goal. Designed for mobile devices, the game utilizes the device's gyroscope to create an immersive experience. Beat your own high score and test your reflexes!
 
 ---
 
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="screenshots/screen1.png" width="30%" />
-  <img src="screenshots/screen2.png" width="30%" />
-  <img src="screenshots/screen3.png" width="30%" />
+  <img src="assets/screen1.PNG" width="30%" />
+  <img src="assets/screen2.PNG" width="30%" />
+  <img src="assets/screen3.PNG" width="30%" />
 </p>
 
 ---
 
 ## 🎥 Gameplay Video
 
-https://github.com/sonal-jaiswal/BallMaze/assets/screen.mp4  
-<sub>📌  `` GitHub asset or video URL.</sub>
+[Download Gameplay Video](assets/screen.mp4)
 
 ## 🎥 Gameplay Video
 
-[![Watch the video](screenshots/screen3.png)](https://github.com/sonal-jaiswal/Ball-Maze/assets/screen.mp4)
+[![Watch the video](assets/screen3.PNG)](assets/screen.mp4)
 
 
 ---
