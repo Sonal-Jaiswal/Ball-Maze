@@ -1,9 +1,9 @@
-import { Audio } from 'expo-av';
+import { createAudioPlayer, AudioPlayer } from 'expo-audio';
 
 class SoundManager {
   private static instance: SoundManager;
-  private sounds: { [key: string]: Audio.Sound } = {};
-  private backgroundMusic: Audio.Sound | null = null;
+  private sounds: { [key: string]: AudioPlayer } = {};
+  private backgroundMusic: AudioPlayer | null = null;
   private isMuted: boolean = false;
 
   private constructor() {}
@@ -17,25 +17,16 @@ class SoundManager {
 
   async loadSounds() {
     try {
-      // Only load sounds that exist
-      const soundsToLoad: { [key: string]: any } = {};
-      
-      try {
-        soundsToLoad.victory = require('../assets/sounds/victory.mp3');
-      } catch (e) {
-        console.warn('Victory sound not found');
-      }
-      
-      try {
-        soundsToLoad.gameOver = require('../assets/sounds/gameover.mp3');
-      } catch (e) {
-        console.warn('Game over sound not found');
-      }
+      const soundsToLoad: { [key: string]: any } = {
+        victory: require('../assets/sounds/victory.mp3'),
+        gameOver: require('../assets/sounds/gameover.mp3'),
+        background: require('../assets/sounds/background.mp3'),
+      };
 
       for (const [key, source] of Object.entries(soundsToLoad)) {
         try {
-          const { sound } = await Audio.Sound.createAsync(source);
-          this.sounds[key] = sound;
+          const player = createAudioPlayer(source);
+          this.sounds[key] = player;
         } catch (error) {
           console.warn(`Failed to load sound ${key}:`, error);
         }
@@ -45,26 +36,28 @@ class SoundManager {
     }
   }
 
-  async playSound(soundName: string) {
+  playSound(soundName: string) {
     if (this.isMuted) return;
 
     try {
       const sound = this.sounds[soundName];
       if (sound) {
-        await sound.replayAsync();
+        sound.seekTo(0);
+        sound.play();
       }
     } catch (error) {
       console.warn(`Error playing sound ${soundName}:`, error);
     }
   }
 
-  async startBackgroundMusic() {
+  startBackgroundMusic() {
     if (this.isMuted) return;
 
     try {
       const sound = this.sounds.background;
       if (sound) {
-        await sound.playAsync();
+        sound.loop = true;
+        sound.play();
         this.backgroundMusic = sound;
       }
     } catch (error) {
@@ -72,10 +65,11 @@ class SoundManager {
     }
   }
 
-  async stopBackgroundMusic() {
+  stopBackgroundMusic() {
     try {
       if (this.backgroundMusic) {
-        await this.backgroundMusic.stopAsync();
+        this.backgroundMusic.pause();
+        this.backgroundMusic.seekTo(0);
       }
     } catch (error) {
       console.error('Error stopping background music:', error);
@@ -84,18 +78,17 @@ class SoundManager {
 
   toggleMute() {
     this.isMuted = !this.isMuted;
-    if (this.isMuted) {
-      this.stopBackgroundMusic();
-    } else {
-      this.startBackgroundMusic();
+    const allSounds = Object.values(this.sounds);
+    for (const sound of allSounds) {
+        sound.muted = this.isMuted;
     }
     return this.isMuted;
   }
 
-  async unloadSounds() {
+  unloadSounds() {
     try {
       for (const sound of Object.values(this.sounds)) {
-        await sound.unloadAsync();
+        sound.remove();
       }
       this.sounds = {};
       this.backgroundMusic = null;
